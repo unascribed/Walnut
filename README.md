@@ -88,10 +88,9 @@ be better for you. Here's a few:
  * [HOCON][] (what inspired Walnut)
  * [YAML][]
  * [HJSON][]
- * [java.util.Properties][]
+ * [java.util.Properties][juP]
  * [JSON][]
- * [Jodd Props][] (basically an improved 
-java.util.Properties)
+ * [Jodd Props][] (basically an improved java.util.Properties)
  * [Chestnut][] (a fork of Walnut)
  * ...and a lot more that we don't know of.
 
@@ -120,14 +119,14 @@ the readme!
 
 ## Java Reference Implementation Information
 
-## What dependencies does it have?
+### What dependencies does it have?
 Only [SLF4J][], but Walnut only directly depends on the API, which is extremely
 light. You should add a SLF4J implementation depending on the logging framework
 your project uses.
 
 [SLF4J]: http://www.slf4j.org
 
-## What version of Java do I need?
+### What version of Java do I need?
 At least Java 6. Some features become more convenient to use in Java 8, thanks
 to lambdas, but anonymous classes work just as well.
 
