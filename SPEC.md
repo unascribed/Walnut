@@ -31,7 +31,7 @@ Anything between // and the next newline or between `/*` and `*/` is considered
 a comment and ignored, unless it is inside a quoted string.
 
 #### Documentation Comments (optional)
-A comment beginning with /*** is a *documentation* comment, and should be 
+A comment beginning with /** is a *documentation* comment, and should be 
 loaded rather than ignored.
 A documentation comment is associated with the first pair after it. If the file 
 is later saved again, a documentation comment should be placed before it's 
