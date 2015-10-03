@@ -75,6 +75,18 @@ the colon or equals sign may be omitted.
 ### Duplicate keys
 A duplicate key is a syntax error. Pairs must not be merged or replaced.
 
+### Strings
+A string is an arbitrary sequence of UTF-8 characters, surrounded in `"`
+characters. Strings support escape sequences, which are one of the following,
+prefixed by a backslash (`\`):
+
+ * `xXX` - arbitrary UTF-8 character, where 'X' are hex digits
+ * `uXXXX` - arbitrary UTF-16 character, where 'X' are hex digits
+ * `UXXXXXXXX` - arbitrary UTF-32 character, where 'X' are hex digits
+ * `"` - a literal quote character (will not close a string)
+ * `)` - a literal close parentheses (will not close a spanned string)
+ * `\` - a literal backslash
+
 ## Spanning (or multi-line) strings
 A spanning string is something similar to the following:
 ```
