@@ -1,8 +1,8 @@
 package com.unascribed.walnut;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -12,6 +12,8 @@ import java.net.URL;
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.unascribed.walnut.value.Value;
 
 /**
  * Represents a mapping of String keys to values of varying types.
@@ -23,10 +25,6 @@ import java.util.Map;
  * @since 0.0.1
  */
 public class WalnutConfig implements Cloneable {
-	protected abstract class Value {
-		public abstract Value clone();
-	}
-
 	protected Map<String, Value> map = new HashMap<String, Value>();
 	
 	////////// INSTANCE
@@ -52,7 +50,8 @@ public class WalnutConfig implements Cloneable {
 	/**
 	 * Serializes this WalnutConfig into a String.
 	 * <p>
-	 * Colons will be used for key-value separation in pairs.
+	 * Colons will be used for key-value separation in pairs, and
+	 * tabs will be used for indentation.
 	 * 
 	 * @since 0.0.1
 	 */
@@ -63,11 +62,11 @@ public class WalnutConfig implements Cloneable {
 	
 	/**
 	 * Serializes this WalnutConfig into a String.
+	 * 
 	 * @param style a definition of how to style the output, e.g. indentation type,
 	 * 			whether to use colons or equals, etc
 	 * @return this config, serialized to a properly formatted Walnut config string,
 	 * 			following the passed style
-	 * 
 	 * @since 0.0.1
 	 */
 	public String toString(SerializationStyle style) {
@@ -164,7 +163,7 @@ public class WalnutConfig implements Cloneable {
 	 */
 	public static WalnutConfig fromFile(File file, WalnutConfig defaults, boolean writeDefaults) throws IOException, ParseException {
 		if (file.exists()) {
-			return fromReader(new FileReader(file), defaults, true);
+			return fromStream(new FileInputStream(file), defaults, true);
 		} else {
 			if (writeDefaults) {
 				//defaults.toFile(file); TODO
@@ -252,6 +251,6 @@ public class WalnutConfig implements Cloneable {
 	}
 	
 	public static WalnutConfig fromReader(Reader r, WalnutConfig defaults, boolean close) throws IOException, ParseException {
-		return null;
+		return new ConfigParser(r).prepare().parse();
 	}
 }
