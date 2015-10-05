@@ -5,7 +5,7 @@
 colon and equals symbols (`:` and `=`)
  * a **value** can be any of the following:
   * a decimal number, such as `501`, `-149` or `281.2`
-  * a hex number, such as `0xFE`
+  * a hex number, such as `0xFE` or `#EED3`
   * a scientific number, such as `2.1e23` or `1.2e-47`
   * a special numeric value, such as `Infinity` or `NaN`
   * a boolean, as in `true` or `false`, `on` or `off`, and `enabled` or 
@@ -17,7 +17,8 @@ colon and equals symbols (`:` and `=`)
   * a spanning string, such as `(\nsome\nstring\n)` (where \n is a newline)
   * a section, being a set of pairs surrounded by curly braces (`{` and `}`), 
 such as `{\nkey: "value"\n}` (where \n is a newline)
-  * Note that octal numbers are *not* valid; `0100` is `100`, not `64`
+  * Note that numbers prefixed with a zero are valid, but are not octal; `0100`
+is `100`, not `64`
  * a **pair** is a key, followed by a `:` or `=` surrounded by any amount of 
 whitespace, followed by a value
  * **file** is used here to refer to any given byte stream, and not 
@@ -54,7 +55,8 @@ refers only to the ASCII line feed, `\n` (0x0A)
 
 ## Keys
 A key is everything before the colon or equals sign in a pair.
-A key can have any characters, except for the colon and equals.
+A key can have any characters, except for the colon, equals, open curly brace,
+open parentheses, and open square bracket.
 For example:
 
  * `This is a key: 5` - valid
@@ -62,12 +64,7 @@ For example:
  * `such:key = 12` - *invalid*
  * `kartläggning: 500` - valid
  * `マッピング: 432` - valid
- * 
-`b̨̪̫̤̖̤̝̩̣̔́̓̃̅̂é̡̯̏̒hȉ̡̗̮̪̦̠́̔̊n̜̮̮̩̑̑̃
-̙̞̙̅̍̅̊ḑ̡̠̜̪̙̞̋̓̓̃̈̒̉̏ 
-t̝̞̃̕ḩ̮̙̃̉̊̐ė̠̔̋̒ 
-w̢̝̫̬̜̒̑́̋a̢̛̪̩̖̯̍̅̒̈̅̔̋l̥̐̄́̕l̢̨̥̤̮̜̅̎̊̅̅
-̧̧̘̭̖̂ = "he waits"` - valid
+ * `b̨̪̫̤̖̤̝̩̣̔́̓̃̅̂é̡̯̏̒hȉ̡̗̮̪̦̠́̔̊n̜̮̮̩̙̞̙̑̑̃̅̍̅̊ḑ̡̠̜̪̙̞̋̓̓̃̈̒̉̏ t̝̞̃̕ḩ̮̙̃̉̊̐ė̠̔̋̒ w̢̝̫̬̜̒̑́̋a̢̛̪̩̖̯̍̅̒̈̅̔̋l̥̐̄́̕l̢̨̧̧̥̤̮̜̘̭̖̅̎̊̅̅̂ = "he waits"` - valid
 
 In the case of a multi-line value, such as a section, array, or spanned string, 
 the colon or equals sign may be omitted.

@@ -12,6 +12,7 @@ import java.net.URL;
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import com.unascribed.walnut.value.Value;
 
@@ -24,10 +25,19 @@ import com.unascribed.walnut.value.Value;
  * 
  * @since 0.0.1
  */
-public class WalnutConfig implements Cloneable {
-	protected Map<String, Value> map = new HashMap<String, Value>();
+public class WalnutConfig implements Cloneable, Value {
+	protected Map<Key, Value> map = new HashMap<Key, Value>();
 	
 	////////// INSTANCE
+	
+	public void put(Key key, Value value) {
+		map.put(key, value);
+	}
+	
+	public Set<Map.Entry<Key, Value>> entrySet() {
+		return map.entrySet();
+	}
+	
 	
 	@Override
 	public WalnutConfig clone() {
@@ -37,16 +47,45 @@ public class WalnutConfig implements Cloneable {
 		} catch (CloneNotSupportedException e) {
 			throw new AssertionError(e);
 		}
-		o.map = new HashMap<String, Value>();
-		for (Map.Entry<String, Value> en : map.entrySet()) {
+		o.map = new HashMap<Key, Value>();
+		for (Map.Entry<Key, Value> en : map.entrySet()) {
 			o.map.put(en.getKey(), en.getValue().clone());
 		}
 		return o;
 	}
 	
+	@Override
+	public String getRawValue() {
+		return toString();
+	}
+	
+	@Override
+	public boolean equalsIgnoreRaw(Value v) {
+		return equals(v);
+	}
+	
+	@Override
+	public int hashCode() {
+		return map.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (getClass() != obj.getClass()) return false;
+		WalnutConfig other = (WalnutConfig) obj;
+		if (map == null) {
+			if (other.map != null)
+				return false;
+		} else if (!map.equals(other.map))
+			return false;
+		return true;
+	}
 	
 	////////// INSTANCE STORAGE METHODS
 	
+
 	/**
 	 * Serializes this WalnutConfig into a String.
 	 * <p>
@@ -70,7 +109,7 @@ public class WalnutConfig implements Cloneable {
 	 * @since 0.0.1
 	 */
 	public String toString(SerializationStyle style) {
-		return null;
+		return map.toString();
 	}
 	
 	
@@ -253,4 +292,6 @@ public class WalnutConfig implements Cloneable {
 	public static WalnutConfig fromReader(Reader r, WalnutConfig defaults, boolean close) throws IOException, ParseException {
 		return new ConfigParser(r).prepare().parse();
 	}
+
+
 }

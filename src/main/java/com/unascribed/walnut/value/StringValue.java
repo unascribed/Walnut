@@ -1,6 +1,6 @@
 package com.unascribed.walnut.value;
 
-public final class StringValue extends Value {
+public final class StringValue extends BaseValue<StringValue> {
 	public final String value;
 
 	public StringValue(String rawValue, String value) {
@@ -12,5 +12,10 @@ public final class StringValue extends Value {
 	public StringValue clone() {
 		return new StringValue(rawValue, value);
 	}
-
+	
+	@Override
+	protected boolean valuesEqual(StringValue that) {
+		if (that.value == null) return this.value == null;
+		return this.value.equals(that.value);
+	}
 }

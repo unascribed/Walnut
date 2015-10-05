@@ -35,8 +35,8 @@ simple*; we don't go for any extra goals like the ability to parse JSON, or
 being a JSON superset, being under 100 calories, or any other things. Walnut is 
 a config format, nothing more.
 
-Walnut also has comparatively strict syntax; You must quote values, but keys 
-may be unquoted. You cannot mix value types (e.g. in HOCON, '10foo' is the 
+Walnut also has comparatively strict syntax; You must quote values, and keys 
+must be unquoted. You cannot mix value types (e.g. in HOCON, '10foo' is the 
 number '10' and the unquoted string 'foo', but in Walnut it is a syntax error 
 unless quoted), only double-quoted strings are supported, sections are defined 
 using {} syntax only, duplicate keys are a syntax error and are not attempted 
@@ -91,7 +91,6 @@ be better for you. Here's a few:
  * [java.util.Properties][juP]
  * [JSON][]
  * [Jodd Props][] (basically an improved java.util.Properties)
- * [Chestnut][] (a fork of Walnut)
  * ...and a lot more that we don't know of.
 
 [HOCON]: https://github.com/typesafehub/config
@@ -100,7 +99,6 @@ be better for you. Here's a few:
 [juP]: https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html
 [JSON]: http://json.org/
 [Jodd Props]: http://jodd.org/doc/props.html
-[Chestnut]: http://github.com/minecrell/Chestnut
 
 
 
@@ -120,22 +118,44 @@ the readme!
 ## Java Reference Implementation Information
 
 ### What dependencies does it have?
-Only [SLF4J][], but Walnut only directly depends on the API, which is extremely
-light. You should add a SLF4J implementation depending on the logging framework
-your project uses.
-
-[SLF4J]: http://www.slf4j.org
+Walnut has no dependencies, other than the standard Java runtime.
 
 ### What version of Java do I need?
-At least Java 6. Some features become more convenient to use in Java 8, thanks
-to lambdas, but anonymous classes work just as well.
+At least Java 6. Some features may be more convenient to use in Java 8.
 
 ### How do I get it?
-Walnut has not had any releases yet, and as such you will have to compile it
-yourself.
+Walnut is in Maven Central. For your convenience, here's it's coordinates in a 
+few different formats:
+
+Gradle/Grails: `com.unascribed:walnut:0.0.1`
+
+Maven:
+```xml
+<dependency>
+    <groupId>com.unascribed</groupId>
+    <artifactId>walnut</artifactId>
+    <version>0.0.1</version>
+</dependency>
+```
+
+Buildr:
+`'com.unascribed:walnut:jar:0.0.1'`
+
+Ivy: `<dependency org="com.unascribed" name="walnut" rev="0.0.1"/>`
+
+Grape:
+```groovy
+@Grapes( 
+    @Grab(group='com.unascribed', module='walnut', version='0.0.1') 
+)
+```
+
+Scala Build Tools: `libraryDependencies += "com.unascribed" % "walnut" % "0.0.1"`
+
+Leiningen: `[com.unascribed/walnut "0.0.1"]`
 
 ### How do I compile it?
-To compile Walnut, you will need JRE 8 or later. You can then build it by
+To compile Walnut, you will need JDK 8 or later. You can then build it by
 `cd`ing to the directory and running:
 
 `./gradlew build` on Linux and Mac
