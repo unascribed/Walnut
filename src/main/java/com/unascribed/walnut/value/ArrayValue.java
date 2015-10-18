@@ -23,4 +23,9 @@ public class ArrayValue extends BaseValue<ArrayValue> {
 		return new ArrayValue(rawValue, nw);
 	}
 
+	@Override
+	public Value[] get() {
+		return value;
+	}
+	
 }

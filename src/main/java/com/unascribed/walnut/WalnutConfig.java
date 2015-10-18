@@ -14,6 +14,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import com.unascribed.walnut.value.BooleanValue;
+import com.unascribed.walnut.value.DoubleValue;
+import com.unascribed.walnut.value.IntValue;
+import com.unascribed.walnut.value.LongValue;
+import com.unascribed.walnut.value.NullValue;
+import com.unascribed.walnut.value.StringValue;
 import com.unascribed.walnut.value.Value;
 
 /**
@@ -22,16 +28,94 @@ import com.unascribed.walnut.value.Value;
  * Utility methods for loading are supplied in the form of the from* methods.
  * A WalnutConfig can also be created directly via a constructor to make an
  * empty config.
+ * <p>
+ * For convenience, put* and get* methods are supplied for easy conversion to
+ * and from Value objects. If you need more control, such as the ability to set
+ * the exact serialization string of a value, or the documentation of a key, use
+ * the raw {@link #put(Key, Value)} method.
  * 
  * @since 0.0.1
  */
 public class WalnutConfig implements Cloneable, Value {
+	private Key keyGoat = new Key(null, null);
 	protected Map<Key, Value> map = new HashMap<Key, Value>();
 	
 	////////// INSTANCE
 	
+	public void putString(String key, String value) {
+		_put(key, new StringValue("\""+value
+			.replace("\\", "\\\\")
+			.replace("\n", "\\n")
+			.replace("\"", "\\\"")+"\"", value));
+	}
+	public void putInt(String key, int value) { _put(key, new IntValue(Integer.toString(value), value)); }
+	public void putLong(String key, long value) { _put(key, new LongValue(Long.toString(value), value)); }
+	public void putDouble(String key, double value) { _put(key, new DoubleValue(Double.toString(value), value)); }
+	public void putBoolean(String key, boolean value) { _put(key, new BooleanValue(Boolean.toString(value), value)); }
+	public void putNull(String key) { _put(key, new NullValue("null")); }
+	
+	private void _put(String key, Value value) {
+		map.put(new Key(key, null), value);
+	}
+	
+	
 	public void put(Key key, Value value) {
 		map.put(key, value);
+	}
+	
+	public String getString(String key) {
+		Value v = get(key);
+		if (v instanceof StringValue) {
+			return ((StringValue)v).value;
+		} else {
+			return v.getRawValue();
+		}
+	}
+	public boolean getBoolean(String key) { return _get(key, BooleanValue.class).value; }
+	public double getDouble(String key) { return _get(key, DoubleValue.class).value; }
+	public int getInt(String key) { return _get(key, IntValue.class).value; }
+	public long getLong(String key) { return _get(key, LongValue.class).value; }
+	
+	public boolean containsKey(String key) { return get(key) != null; }
+	/**
+	 * @return {@code true} if the entry exists and is null, or {@code false} if the entry does not exist or is not null.
+	 */
+	public boolean isNull(String key) { return get(key) instanceof NullValue; }
+	
+	@SuppressWarnings("unchecked") // it IS checked, damn it
+	private <T extends Value> T _get(String key, Class<T> clazz) {
+		Value v = get(key);
+		if (v == null) {
+			throw new IllegalArgumentException(key);
+		}
+		if (v instanceof NullValue) {
+			return null;
+		}
+		if (clazz.isInstance(v)) {
+			return (T) v;
+		} else {
+			throw new ClassCastException(v.getClass().getSimpleName()+" cannot be cast to "+clazz.getSimpleName());
+		}
+	}
+	
+	public Value get(String key) {
+		WalnutConfig section = this;
+		String[] path = key.split("\\.");
+		for (int i = 0; i < path.length-1; i++) {
+			Value v = section.get(path[i]);
+			if (v instanceof WalnutConfig) {
+				section = (WalnutConfig) v;
+			} else {
+				throw new ClassCastException("attempt to traverse into non-section "+path[i]+" while resolving "+key);
+			}
+		}
+		if (path.length == 0) return null;
+		keyGoat.key = path[path.length-1];
+		return section.map.get(keyGoat);
+	}
+	
+	public Value get(Key key) {
+		return map.get(key);
 	}
 	
 	public Set<Map.Entry<Key, Value>> entrySet() {

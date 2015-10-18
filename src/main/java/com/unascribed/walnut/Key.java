@@ -1,8 +1,8 @@
 package com.unascribed.walnut;
 
 public class Key {
-	private final String key;
-	private final String documentation;
+	protected String key;
+	protected String documentation;
 	public Key(String key, String documentation) {
 		this.key = key;
 		this.documentation = documentation;

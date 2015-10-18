@@ -18,4 +18,9 @@ public final class DoubleValue extends BaseValue<DoubleValue> {
 		return that.value == this.value;
 	}
 
+	@Override
+	public Double get() {
+		return value;
+	}
+	
 }

@@ -17,4 +17,9 @@ public final class BooleanValue extends BaseValue<BooleanValue> {
 		return that.value == this.value;
 	}
 
+	@Override
+	public Boolean get() {
+		return value;
+	}
+	
 }

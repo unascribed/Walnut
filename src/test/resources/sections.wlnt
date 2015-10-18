@@ -1,0 +1,27 @@
+this-is-a {
+	section: "!"
+}
+another-section {
+	nested-section {
+	    mixed-whitespace: "this is bad practice, but it works"
+	}
+}
+no-whitespace {
+this-is: "also bad practice, but it demonstrates that whitespace is meaningless"
+}
+deep-nesting {
+	we {
+		have {
+			to {
+				go {
+					deeper {
+						no-more: true
+					}
+				}
+			}
+		}
+	}
+}
+with-a-colon: {
+	sections-dont-need: "colons"
+}

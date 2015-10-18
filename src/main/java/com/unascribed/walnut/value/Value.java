@@ -27,12 +27,13 @@ abstract class BaseValue<T extends BaseValue<?>> implements Value {
 	}
 	protected abstract boolean valuesEqual(T that);
 	public abstract T clone();
+	public abstract Object get();
 	@Override
 	public String getRawValue() {
 		return rawValue;
 	}
 	@Override
 	public String toString() {
-		return rawValue;
+		return getClass().getSimpleName()+"["+get()+"]\n"+rawValue;
 	}
 }

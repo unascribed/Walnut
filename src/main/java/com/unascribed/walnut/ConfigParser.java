@@ -65,7 +65,9 @@ public class ConfigParser {
 	public WalnutConfig parse() throws IOException, ParseException {
 		WalnutConfig conf = new WalnutConfig();
 		while (hasMore()) {
-			conf.map.put(new Key(readKey(), lastDocumentationComment), readValue());
+			String k = readKey();
+			if (k == null) break;
+			conf.map.put(new Key(k, lastDocumentationComment), readValue());
 			lastDocumentationComment = null;
 		}
 		return conf;
@@ -78,6 +80,7 @@ public class ConfigParser {
 	public String readKey() throws IOException, ParseException {
 		skipWhitespace();
 		String rtrn = trim(allUntil(':', '=', '{', '(', '['));
+		if (rtrn == null) return null;
 		int sep = bufCurrent;
 		System.out.print("q: ");
 		System.out.println(Character.toChars(sep));
@@ -126,13 +129,16 @@ public class ConfigParser {
 		} else if (first == '{') {
 			WalnutConfig conf = new WalnutConfig();
 			while (true) {
+				skipWhitespace();
 				int c = advance();
 				if (c == '}') {
 					break;
 				} else {
 					withdraw();
 				}
-				conf.map.put(new Key(readKey(), lastDocumentationComment), readValue());
+				String k = readKey();
+				if (k == null) throw new EOFException("section was not closed before EOF at "+idx);
+				conf.map.put(new Key(k, lastDocumentationComment), readValue());
 				lastDocumentationComment = null;
 			}
 			return conf;
@@ -274,6 +280,7 @@ public class ConfigParser {
 	 * Public only to allow unit testing.
 	 */
 	public static String trim(String s) {
+		if (s == null) return null;
 		int start = 0;
 		for (; start < s.length(); start++) {
 			if (!Character.isWhitespace(s.codePointAt(start))) {
@@ -319,7 +326,7 @@ public class ConfigParser {
 	}
 	
 	/**
-	 * Read all characters, starting from the current position in the stream,
+	 * Read all characters, starting from the current position in the stream. The character that
 	 * halted reading will be skipped, but can be retrieved from the {@code current} field.
 	 * <p>
 	 * Public only to allow unit testing.
@@ -328,7 +335,8 @@ public class ConfigParser {
 	public String allUntil(int... end) throws IOException, ParseException {
 		StringBuilder accumulator = new StringBuilder();
 		while (true) {
-			int c = advance();
+			int c = tryAdvance();
+			if (c == -1) return null;
 			for (int i : end) {
 				if (c == i) {
 					return accumulator.toString();
@@ -373,7 +381,7 @@ public class ConfigParser {
 	 * @see #parse()
 	 */
 	public void skipWhitespace() throws IOException, ParseException {
-		while (Character.isWhitespace(advance())) {}
+		while (Character.isWhitespace(tryAdvance())) {}
 		withdraw();
 	}
 	
@@ -447,7 +455,7 @@ public class ConfigParser {
 		boolean firstDocCommentChar = false;
 		
 		StringBuilder documentationBuilder = null;
-		System.out.println("Entering advance");
+		//System.out.println("Entering advance");
 		int skip = 0;
 		while (true) {
 			bufPrevious = bufCurrent;
@@ -462,10 +470,10 @@ public class ConfigParser {
 			if (bufCurrent == -1) {
 				break;
 			}
-			System.out.println(Character.toChars(bufCurrent));
+			//System.out.println(Character.toChars(bufCurrent));
 			
 			if (skip > 0) {
-				System.out.println("Skipping");
+				//System.out.println("Skipping");
 				skip--;
 				continue;
 			}

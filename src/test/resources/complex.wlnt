@@ -1,0 +1,59 @@
+array: [
+	1,
+	2,
+	3,
+	4,
+	5,
+	6,
+	7,
+	8, // trailing comma
+]
+/**
+ * Documentation!
+ */
+documented: true
+mixed-array: [
+	1,
+	2,
+	"potato",
+	4,
+	{
+		section-in-an: "array"
+	},
+	[
+		"array",
+		"in",
+		"an",
+		"array",
+	],
+	//comment, with a comma
+	(
+		spanned
+		string
+	),
+	"spooky scary whitespace",
+	"sends shivers down your spine",
+]
+section {
+	with: [
+		"an array",
+		{
+			and-a: "section in the array"
+		}
+	]
+	/**
+	 * And some scientific numbers (30 billion)
+	 */
+	wow: 3e10
+}
+array-with-no-colon [
+	"yes, this is valid"
+]
+floating-point: 32.4
+hex: 0xABCDEF
+64-bit: 4294967300
+/*
+ * NOT documentation!
+ */
+not-documented: true
+// trailing comment

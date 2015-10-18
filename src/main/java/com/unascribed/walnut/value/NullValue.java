@@ -15,5 +15,10 @@ public class NullValue extends BaseValue<NullValue> {
 	public NullValue clone() {
 		return new NullValue(rawValue);
 	}
+	
+	@Override
+	public Object get() {
+		return null;
+	}
 
 }

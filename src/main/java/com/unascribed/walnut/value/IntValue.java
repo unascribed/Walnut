@@ -16,5 +16,10 @@ public final class IntValue extends BaseValue<IntValue> {
 	protected boolean valuesEqual(IntValue that) {
 		return that.value == this.value;
 	}
+	
+	@Override
+	public Integer get() {
+		return value;
+	}
 
 }

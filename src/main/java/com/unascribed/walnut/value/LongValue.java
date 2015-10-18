@@ -17,4 +17,8 @@ public final class LongValue extends BaseValue<LongValue> {
 		return that.value == this.value;
 	}
 
+	@Override
+	public Long get() {
+		return value;
+	}
 }

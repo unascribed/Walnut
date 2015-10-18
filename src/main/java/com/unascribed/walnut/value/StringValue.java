@@ -18,4 +18,9 @@ public final class StringValue extends BaseValue<StringValue> {
 		if (that.value == null) return this.value == null;
 		return this.value.equals(that.value);
 	}
+	
+	@Override
+	public String get() {
+		return value;
+	}
 }

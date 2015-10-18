@@ -19,8 +19,6 @@ import com.unascribed.walnut.value.NullValue;
 import com.unascribed.walnut.value.StringValue;
 import com.unascribed.walnut.value.Value;
 
-import sun.security.krb5.internal.ktab.KeyTabEntry;
-
 public class ParserTests {
 	private ConfigParser parser(String text) throws Exception {
 		return new ConfigParser(new StringReader(text));
