@@ -38,9 +38,14 @@ import com.unascribed.walnut.value.Value;
  */
 public class WalnutConfig implements Cloneable, Value {
 	private Key keyGoat = new Key(null, null);
+	private WalnutConfig defaults;
 	protected Map<Key, Value> map = new HashMap<Key, Value>();
 	
 	////////// INSTANCE
+	
+	public void setDefaults(WalnutConfig defaults) {
+		this.defaults = defaults;
+	}
 	
 	public void putString(String key, String value) {
 		_put(key, new StringValue("\""+value
@@ -57,11 +62,10 @@ public class WalnutConfig implements Cloneable, Value {
 	private void _put(String key, Value value) {
 		map.put(new Key(key, null), value);
 	}
-	
-	
 	public void put(Key key, Value value) {
 		map.put(key, value);
 	}
+	
 	
 	public String getString(String key) {
 		Value v = get(key);
@@ -86,7 +90,11 @@ public class WalnutConfig implements Cloneable, Value {
 	private <T extends Value> T _get(String key, Class<T> clazz) {
 		Value v = get(key);
 		if (v == null) {
-			throw new IllegalArgumentException(key);
+			if (defaults == null) {
+				throw new IllegalArgumentException(key);
+			} else {
+				return defaults._get(key, clazz);
+			}
 		}
 		if (v instanceof NullValue) {
 			return null;
@@ -374,7 +382,9 @@ public class WalnutConfig implements Cloneable, Value {
 	}
 	
 	public static WalnutConfig fromReader(Reader r, WalnutConfig defaults, boolean close) throws IOException, ParseException {
-		return new ConfigParser(r).prepare().parse();
+		WalnutConfig conf = new ConfigParser(r).prepare().parse();
+		conf.setDefaults(defaults);
+		return conf;
 	}
 
 

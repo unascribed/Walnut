@@ -82,8 +82,8 @@ public class ConfigParser {
 		String rtrn = trim(allUntil(':', '=', '{', '(', '['));
 		if (rtrn == null) return null;
 		int sep = bufCurrent;
-		System.out.print("q: ");
-		System.out.println(Character.toChars(sep));
+		//System.out.print("q: ");
+		//System.out.println(Character.toChars(sep));
 		// In the case of a spanned string, section, or array, we want to keep
 		// the initial character so it is properly detected by readValue
 		if (sep == '{' || sep == '(' || sep == '[') {
@@ -145,7 +145,7 @@ public class ConfigParser {
 		} else {
 			withdraw();
 			String token = allUntilWhitespaceOr(',', '}', ']', '\n');
-			System.out.println("W: "+token);
+			//System.out.println("W: "+token);
 			if (first == '-' || first == 'I' || first == 'N' || isBasicDigit(first)) {
 				String n = token.startsWith("0x") ? token : trimLeadingZeroes(token);
 				try {
@@ -419,7 +419,7 @@ public class ConfigParser {
 		if (bufNextNext != -1) {
 			throw new AssertionError("Already withdrawn!");
 		}
-		System.out.println("Withdrawing");
+		//System.out.println("Withdrawing");
 		idx--;
 		bufNextNext = bufNext;
 		bufNext = bufCurrent;
